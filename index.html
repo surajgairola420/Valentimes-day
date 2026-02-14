@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Card</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: pink;
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            text-align: center;
+            border: 2px solid red;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: red;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .no-button:hover {
+            transform: translateX(30px);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>❤️ Will you be my Valentine? ❤️</h1>
+        <button class="button yes-button">Yes</button>
+        <button class="button no-button">No</button>
+    </div>
+    <script>
+        document.querySelector('.yes-button').addEventListener('click', function() {
+            alert('There is no turning back now 😈');
+        });
+    </script>
+</body>
+</html>

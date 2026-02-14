@@ -3,48 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Day Card</title>
+    <title>Will you be my Valentine?</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: pink;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 50%, #ff69b4 100%);
             font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
         }
+
+        /* Falling hearts animation */
+        .hearts-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 2rem;
+            animation: fall 6s linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         .card {
+            position: relative;
+            z-index: 10;
             text-align: center;
-            border: 2px solid red;
-            padding: 20px;
-            border-radius: 15px;
-            background-color: white;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            animation: slideIn 0.8s ease-out;
         }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff1493;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .emoji {
+            font-size: 3rem;
+            margin: 0 10px;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
         .button {
-            padding: 10px 20px;
-            margin: 10px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
             border: none;
-            border-radius: 5px;
-            background-color: red;
-            color: white;
+            border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
+
+        .yes-button {
+            background-color: #ff1493;
+            color: white;
+        }
+
+        .yes-button:hover {
+            background-color: #ff69b4;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        .yes-button:active {
+            transform: scale(0.98);
+        }
+
+        .no-button {
+            background-color: #ddd;
+            color: #333;
+            position: relative;
+        }
+
         .no-button:hover {
-            transform: translateX(30px);
+            background-color: #ddd;
+            transform: translateX(50px);
+        }
+
+        .no-button:active {
+            transform: translateX(50px);
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #ff1493;
+            font-size: 1.5rem;
+            margin-top: 30px;
+            animation: popIn 0.6s ease-out;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .devil-emoji {
+            font-size: 2rem;
+            margin-left: 10px;
+            display: inline-block;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
+    <div class="hearts-background" id="heartsBackground"></div>
+    
     <div class="card">
-        <h1>❤️ Will you be my Valentine? ❤️</h1>
-        <button class="button yes-button">Yes</button>
-        <button class="button no-button">No</button>
+        <h1>
+            <span class="emoji">💕</span>
+            Will you be my Valentine?
+            <span class="emoji">💕</span>
+        </h1>
+        
+        <div class="button-container">
+            <button class="button yes-button" id="yesBtn">Yes</button>
+            <button class="button no-button" id="noBtn">No</button>
+        </div>
+
+        <div class="success-message" id="successMsg">
+            There is no turning back now
+            <span class="devil-emoji">😈</span>
+        </div>
     </div>
+
     <script>
-        document.querySelector('.yes-button').addEventListener('click', function() {
-            alert('There is no turning back now 😈');
+        // Create falling hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.getElementById('heartsBackground').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 7000);
+        }
+
+        // Create hearts periodically
+        setInterval(createHeart, 300);
+
+        // Yes button click handler
+        document.getElementById('yesBtn').addEventListener('click', function() {
+            document.querySelector('.button-container').style.display = 'none';
+            document.getElementById('successMsg').classList.add('show');
+            
+            // Create more hearts on celebration
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        });
+
+        // No button escape effect
+        document.getElementById('noBtn').addEventListener('mouseenter', function() {
+            const randomX = (Math.random() - 0.5) * 200;
+            const randomY = (Math.random() - 0.5) * 200;
+            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
         });
     </script>
 </body>

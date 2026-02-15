@@ -4,21 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine's Day</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #ff99cc, #ff6699);
+            overflow: hidden;
+            text-align: center;
+            animation: falling-hearts 3s infinite;
+        }
+        @keyframes falling-hearts {
+            0% {transform: translateY(-100%);}
+            100% {transform: translateY(100%);}
+        }
+        h1 {
+            color: white;
+            font-size: 3em;
+            margin-top: 20%;
+        }
+        .btn {
+            margin: 20px;
+            padding: 10px 20px;
+            background-color: white;
+            border: 2px solid #ff6699;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        .photo {
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .show {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <h1>Happy Valentine's Day!</h1>
-    <img src="2.jpeg" alt="Image 2">
-    <img src="3.jpeg" alt="Image 3">
-    <img src="4.jpeg" alt="Image 4">
-    <img src="5.jpeg" alt="Image 5">
-    <img src="6.jpeg" alt="Image 6">
-    <img src="8.jpeg" alt="Image 8">
-    <img src="9.jpeg" alt="Image 9">
-    <img src="10.jpeg" alt="Image 10">
-    <img src="11.jpeg" alt="Image 11">
-    <img src="12.jpeg" alt="Image 12">
-    <img src="13.jpeg" alt="Image 13">
-    <img src="14.jpeg" alt="Image 14">
-    <img src="WhatsApp Image 2026-02-15 at 1.19.34 AM.jpeg" alt="WhatsApp Image">
+    <h1>Will you be my Valentine? ❤️</h1>
+    <button class="btn" onclick="showMemories()">Yes</button>
+    <button class="btn" onclick="hideMemories()">No</button>
+    <div id="memories" class="hidden">
+        <p>Let's relive some of our memories</p>
+        <img id="photo" class="photo" src="2.jpeg" alt="Memory" />
+    </div>
+    <script>
+        let photos = [
+            '2.jpeg',
+            '3.jpeg',
+            '4.jpeg',
+            '5.jpeg',
+            '6.jpeg',
+            '8.jpeg',
+            '9.jpeg',
+            '10.jpeg',
+            '11.jpeg',
+            '12.jpeg',
+            '13.jpeg',
+            '14.jpeg',
+            'WhatsApp Image 2026-02-15 at 1.19.34 AM.jpeg'
+        ];
+        let index = 0;
+
+        function showMemories() {
+            document.getElementById('memories').classList.remove('hidden');
+            showPhoto();
+        }
+
+        function hideMemories() {
+            document.getElementById('memories').classList.add('hidden');
+            index = 0;
+        }
+
+        function showPhoto() {
+            if (index < photos.length) {
+                let img = document.getElementById('photo');
+                img.src = photos[index];
+                img.classList.add('show');
+                index++;
+                setTimeout(() => {
+                    img.classList.remove('show');
+                    setTimeout(showPhoto, 1000);
+                }, 2000);
+            }
+        }
+    </script>
 </body>
 </html>

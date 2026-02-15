@@ -9,84 +9,107 @@
             background: linear-gradient(to bottom, #ff99cc, #ff6699);
             overflow: hidden;
             text-align: center;
-            animation: falling-hearts 3s infinite;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        @keyframes falling-hearts {
-            0% {transform: translateY(-100%);}
-            100% {transform: translateY(100%);}
-        }
-        h1 {
+        h1, #devil-text {
             color: white;
-            font-size: 3em;
-            margin-top: 20%;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            padding: 20px;
         }
+        .btn-container { display: flex; gap: 20px; justify-content: center; width: 100%; position: relative; height: 100px; }
         .btn {
-            margin: 20px;
-            padding: 10px 20px;
+            padding: 15px 30px;
             background-color: white;
             border: 2px solid #ff6699;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 1.2em;
             cursor: pointer;
+            z-index: 10;
         }
-        .hidden {
-            display: none;
-        }
+        #noBtn { position: absolute; transition: 0.3s ease; }
+        .hidden { display: none; }
+        .photo-container { width: 80%; max-width: 400px; margin-top: 20px; }
         .photo {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             opacity: 0;
             transition: opacity 1s;
+            display: none;
         }
-        .show {
-            opacity: 1;
-        }
+        .show { opacity: 1; display: block; }
     </style>
 </head>
 <body>
-    <h1>Will you be my Valentine? ❤️</h1>
-    <button class="btn" onclick="showMemories()">Yes</button>
-    <button class="btn" onclick="hideMemories()">No</button>
-    <div id="memories" class="hidden">
-        <p>Let's relive some of our memories</p>
-        <img id="photo" class="photo" src="2.jpeg" alt="Memory" />
+    <div id="setup">
+        <h1>Will you be my Valentine? ❤️</h1>
+        <div class="btn-container">
+            <button class="btn" id="yesBtn" onclick="startCelebration()">Yes</button>
+            <button class="btn" id="noBtn">No</button>
+        </div>
     </div>
+
+    <div id="celebration" class="hidden">
+        <h1 id="devil-text">There is no turning back now 😈</h1>
+        <div class="photo-container">
+            <img id="photo" class="photo" src="" alt="Memory" />
+        </div>
+    </div>
+
     <script>
+        const noBtn = document.getElementById('noBtn');
+        const setup = document.getElementById('setup');
+        const celebration = document.getElementById('celebration');
+        const photoImg = document.getElementById('photo');
+
+        function moveNoButton() {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            moveNoButton();
+        });
+
         let photos = [
-            '2.jpeg',
-            '3.jpeg',
-            '4.jpeg',
-            '5.jpeg',
-            '6.jpeg',
-            '8.jpeg',
-            '9.jpeg',
-            '10.jpeg',
-            '11.jpeg',
-            '12.jpeg',
-            '13.jpeg',
-            '14.jpeg',
-            'WhatsApp Image 2026-02-15 at 1.19.34 AM.jpeg'
+            '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', 
+            '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', 
+            '13.jpeg', '14.jpeg', 'WhatsApp Image 2026-02-15 at 1.19.34 AM.jpeg'
         ];
         let index = 0;
 
-        function showMemories() {
-            document.getElementById('memories').classList.remove('hidden');
-            showPhoto();
-        }
-
-        function hideMemories() {
-            document.getElementById('memories').classList.add('hidden');
-            index = 0;
+        function startCelebration() {
+            setup.classList.add('hidden');
+            celebration.classList.remove('hidden');
+            setTimeout(showPhoto, 2000);
         }
 
         function showPhoto() {
             if (index < photos.length) {
-                let img = document.getElementById('photo');
-                img.src = photos[index];
-                img.classList.add('show');
+                photoImg.src = photos[index];
+                photoImg.classList.add('show');
                 index++;
+                
                 setTimeout(() => {
-                    img.classList.remove('show');
-                    setTimeout(showPhoto, 1000);
-                }, 2000);
+                    if (index < photos.length) {
+                        photoImg.classList.remove('show');
+                        setTimeout(showPhoto, 500); 
+                    }
+                }, 2500);
+            } else {
+                index = 0; 
+                showPhoto();
             }
         }
     </script>

@@ -17,11 +17,12 @@
             justify-content: center;
             align-items: center;
         }
-        h1, #devil-text {
+        h1, #main-text {
             color: white;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             padding: 20px;
+            transition: all 0.5s ease;
         }
         .btn-container { display: flex; gap: 20px; justify-content: center; width: 100%; position: relative; height: 100px; }
         .btn {
@@ -35,19 +36,33 @@
         }
         #noBtn { position: absolute; transition: 0.3s ease; }
         .hidden { display: none; }
-        .photo-container { width: 80%; max-width: 400px; margin-top: 20px; }
+        .photo-container { 
+            position: relative;
+            width: 80%; 
+            max-width: 400px; 
+            height: 500px;
+            margin-top: 20px; 
+        }
         .photo {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            object-fit: cover;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             opacity: 0;
-            transition: opacity 1s;
-            display: none;
+            transition: opacity 1.5s ease-in-out; /* Smooth fade */
         }
-        .show { opacity: 1; display: block; }
+        .show { opacity: 1; }
     </style>
 </head>
 <body>
+    <audio id="bgMusic" loop>
+        <source src="perfect.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="setup">
         <h1>Will you be my Valentine? ❤️</h1>
         <div class="btn-container">
@@ -57,9 +72,10 @@
     </div>
 
     <div id="celebration" class="hidden">
-        <h1 id="devil-text">There is no turning back now 😈</h1>
+        <h1 id="main-text">There is no turning back now 😈</h1>
         <div class="photo-container">
-            <img id="photo" class="photo" src="" alt="Memory" />
+            <img id="photo1" class="photo" src="" alt="Memory" />
+            <img id="photo2" class="photo" src="" alt="Memory" />
         </div>
     </div>
 
@@ -67,7 +83,8 @@
         const noBtn = document.getElementById('noBtn');
         const setup = document.getElementById('setup');
         const celebration = document.getElementById('celebration');
-        const photoImg = document.getElementById('photo');
+        const mainText = document.getElementById('main-text');
+        const bgMusic = document.getElementById('bgMusic');
 
         function moveNoButton() {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
@@ -77,10 +94,7 @@
         }
 
         noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); 
-            moveNoButton();
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); });
 
         let photos = [
             '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', 
@@ -88,29 +102,36 @@
             '13.jpeg', '14.jpeg', 'WhatsApp Image 2026-02-15 at 1.19.34 AM.jpeg'
         ];
         let index = 0;
+        let currentImgTag = document.getElementById('photo1');
+        let nextImgTag = document.getElementById('photo2');
 
         function startCelebration() {
             setup.classList.add('hidden');
             celebration.classList.remove('hidden');
-            setTimeout(showPhoto, 2000);
+            bgMusic.play().catch(e => console.log("Audio block:", e));
+            
+            setTimeout(() => {
+                mainText.innerHTML = "I love you baby ❤️";
+                showPhoto();
+            }, 3000); // 3 seconds of devil text, then switch
         }
 
         function showPhoto() {
-            if (index < photos.length) {
-                photoImg.src = photos[index];
-                photoImg.classList.add('show');
-                index++;
+            if (index >= photos.length) index = 0;
+
+            nextImgTag.src = photos[index];
+            nextImgTag.onload = () => {
+                nextImgTag.classList.add('show');
+                currentImgTag.classList.remove('show');
                 
-                setTimeout(() => {
-                    if (index < photos.length) {
-                        photoImg.classList.remove('show');
-                        setTimeout(showPhoto, 500); 
-                    }
-                }, 2500);
-            } else {
-                index = 0; 
-                showPhoto();
-            }
+                // Swap tags for next turn
+                let temp = currentImgTag;
+                currentImgTag = nextImgTag;
+                nextImgTag = temp;
+
+                index++;
+                setTimeout(showPhoto, 4000); // Wait 4 seconds per photo
+            };
         }
     </script>
 </body>

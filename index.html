@@ -1,101 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Day</title>
-    <style>
-        body {
-            background: linear-gradient(to bottom, #ff99cc, #ff6699);
-            overflow: hidden;
-            text-align: center;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        h1, #main-text {
-            color: white;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            padding: 20px;
-            transition: all 0.5s ease;
-        }
-        .btn-container { display: flex; gap: 20px; justify-content: center; width: 100%; position: relative; height: 100px; }
-        .btn {
-            padding: 15px 30px;
-            background-color: white;
-            border: 2px solid #ff6699;
-            border-radius: 10px;
-            font-size: 1.2em;
-            cursor: pointer;
-            z-index: 10;
-        }
-        #noBtn { position: absolute; transition: 0.3s ease; }
-        .hidden { display: none; }
-        .photo-container { 
-            position: relative;
-            width: 80%; 
-            max-width: 400px; 
-            height: 500px;
-            margin-top: 20px; 
-        }
-        .photo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out; /* Smooth fade */
-        }
-        .show { opacity: 1; }
-    </style>
-</head>
-<body>
-    <audio id="bgMusic" loop>
-        <source src="perfect.mp3" type="audio/mpeg">
-    </audio>
-
-    <div id="setup">
-        <h1>Will you be my Valentine? ❤️</h1>
-        <div class="btn-container">
-            <button class="btn" id="yesBtn" onclick="startCelebration()">Yes</button>
-            <button class="btn" id="noBtn">No</button>
-        </div>
-    </div>
-
-    <div id="celebration" class="hidden">
-        <h1 id="main-text">There is no turning back now 😈</h1>
-        <div class="photo-container">
-            <img id="photo1" class="photo" src="" alt="Memory" />
-            <img id="photo2" class="photo" src="" alt="Memory" />
-        </div>
-    </div>
-
-    <script>
-        const noBtn = document.getElementById('noBtn');
-        const setup = document.getElementById('setup');
-        const celebration = document.getElementById('celebration');
-        const mainText = document.getElementById('main-text');
-        const bgMusic = document.getElementById('bgMusic');
-
-        function moveNoButton() {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
-        }
-
-        noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); });
-
+// Photo slideshow logic
         let photos = [
             '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', 
             '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', 
@@ -113,7 +16,7 @@
             setTimeout(() => {
                 mainText.innerHTML = "I love you baby ❤️";
                 showPhoto();
-            }, 3000); // 3 seconds of devil text, then switch
+            }, 2000); // Reduced wait time for the text change
         }
 
         function showPhoto() {
@@ -124,15 +27,13 @@
                 nextImgTag.classList.add('show');
                 currentImgTag.classList.remove('show');
                 
-                // Swap tags for next turn
+                // Swap tags for the next transition
                 let temp = currentImgTag;
                 currentImgTag = nextImgTag;
                 nextImgTag = temp;
 
                 index++;
-                setTimeout(showPhoto, 4000); // Wait 4 seconds per photo
+                // Photo stays for 4 seconds before the next one starts loading
+                setTimeout(showPhoto, 4000); 
             };
         }
-    </script>
-</body>
-</html>

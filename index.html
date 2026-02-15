@@ -1,39 +1,43 @@
-// Photo slideshow logic
-        let photos = [
-            '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', 
-            '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', 
-            '13.jpeg', '14.jpeg', 'WhatsApp Image 2026-02-15 at 1.19.34 AM.jpeg'
-        ];
-        let index = 0;
-        let currentImgTag = document.getElementById('photo1');
-        let nextImgTag = document.getElementById('photo2');
-
-        function startCelebration() {
-            setup.classList.add('hidden');
-            celebration.classList.remove('hidden');
-            bgMusic.play().catch(e => console.log("Audio block:", e));
-            
-            setTimeout(() => {
-                mainText.innerHTML = "I love you baby ❤️";
-                showPhoto();
-            }, 2000); // Reduced wait time for the text change
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #ff99cc, #ff6699);
+            overflow: hidden;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-
-        function showPhoto() {
-            if (index >= photos.length) index = 0;
-
-            nextImgTag.src = photos[index];
-            nextImgTag.onload = () => {
-                nextImgTag.classList.add('show');
-                currentImgTag.classList.remove('show');
-                
-                // Swap tags for the next transition
-                let temp = currentImgTag;
-                currentImgTag = nextImgTag;
-                nextImgTag = temp;
-
-                index++;
-                // Photo stays for 4 seconds before the next one starts loading
-                setTimeout(showPhoto, 4000); 
-            };
+        h1, #main-text {
+            color: white;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            padding: 20px;
+            transition: all 0.5s ease;
         }
+        .btn-container { display: flex; gap: 20px; justify-content: center; width: 100%; position: relative; height: 100px; }
+        .btn {
+            padding: 15px 30px;
+            background-color: white;
+            border: 2px solid #ff6699;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #noBtn { position: absolute; transition: 0.3s ease; }
+        .hidden { display: none; }
+        .photo-container { 
+            position: relative;
+            width: 80%; 
+            max-width: 400px; 
+            height: 500px;
